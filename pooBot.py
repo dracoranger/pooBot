@@ -18,14 +18,19 @@ config = open('config.txt','r')
 conf = config.readlines() #push to array or do directly
 token = conf[0][:-1]
 print(token)
-keysName = conf[1][:-1]
-print(keysName)
-usedKeys = conf[2][:-1]
-print(usedKeys)
-channelNum = conf[3][:-1]
-userComp = conf[4][:-1]
+channelNum = conf[1][:-1]
+userComp = conf[2][:-1]
 
-keyTakenToday=[]
+'''
+Calculate probability
+'''
+def generateEstimate(previousPoos):
+    #Previous poos = list of "timestamp": "2016-03-24T23:15:59.605000+00:00"
+    timeDifference = []
+    last = 0
+    for i in previousPoos:
+        if last == 0:
+
 
 @client.event
 async def on_ready():
@@ -41,6 +46,11 @@ async def on_message(message):
     if message.author == client.user:
         return
     if message.channel == client.get_channel(channelNum) or message.channel.is_private:
+
+
+        '''
+        Post result
+        '''
         '''
         prints the list of keys
         '''
