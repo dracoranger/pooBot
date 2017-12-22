@@ -87,12 +87,14 @@ async def on_message(message):
         timeDifference = sorted(timeDifference)
         median = int(timeDifference[math.floor(len(timeDifference)/2)])
         stdev = int(statistics.stdev(timeDifference))
-        upperBound = int((median * stdev) + (datetime.now() - datetime.utcfromtimestamp(0)).total_seconds())
-        lowerBound = int((median - (median * stdev)) + (datetime.now() - datetime.utcfromtimestamp(0)).total_seconds())#need to change to specific dates
+        upperBound = int((median + 2*stdev) + (datetime.now() - datetime.utcfromtimestamp(0)).total_seconds())
+        lowerBound = int((median - 2*stdev) + (datetime.now() - datetime.utcfromtimestamp(0)).total_seconds())#need to change to specific dates
+        if lowerBound < (datetime.now() - datetime.utcfromtimestamp(0)).total_seconds():
+            lowerBound = int((datetime.now() - datetime.utcfromtimestamp(0)).total_seconds())
         dateUB = datetime.fromtimestamp(upperBound)
         dateLB = datetime.fromtimestamp(lowerBound)
-        dateGuess = datetime.fromtimestamp(random.randrange(int(lowerBound),int(upperBound),1))
-        ret = "Aaron uses the bathroom every "+ str(median) +" seconds with a standard deviation of "+ str(stdev)+ "seconds.\nThe upper bound for the next one is " +str(dateUB)+", the lower bound is "+ str(dateLB)+". \nI predict "+str(dateGuess)+'.'
+        dateGuess = datetime.fromtimestamp(random.randrange(lowerBound,upperBound,1))
+        ret = "Aaron uses the bathroom every "+ str(median) +" seconds with a standard deviation of "+ str(stdev)+ " seconds.\nThe upper bound for the next one is " +str(dateUB)+", the lower bound is "+ str(dateLB)+". \nI predict "+str(dateGuess)+'.'
 
         #temp = generateEstimate()
         await client.send_message(message.channel, ret)
